@@ -24,7 +24,7 @@ const InfoBox = ({title, text}: {title: string, text: string}) => {
     text: {
       margin: 0,
       width: '100%',
-      color: 'lightgray',
+      color: 'white',
     },
     noInfo: {
       fontStyle: 'italic',

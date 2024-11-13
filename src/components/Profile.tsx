@@ -14,7 +14,7 @@ const Profile = ({ id, username, htmlUrl, email, company, location, bio, avatar}
       border: '1px solid #ccc',
       borderRadius: '5px',
       maxWidth: '600px',
-      margin: '1rem',
+      margin: '0 1rem',
       overflow: 'hidden',
     },
     avatarContainer: {

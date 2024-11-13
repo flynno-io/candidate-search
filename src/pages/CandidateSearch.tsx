@@ -1,5 +1,7 @@
 import { useState, useEffect, CSSProperties } from "react"
 import { searchGithub, searchGithubUser } from "../api/API"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import Profile from "../components/Profile"
 import { Candidate } from "../interfaces/Candidate.interface"
 
@@ -59,6 +61,20 @@ const CandidateSearch = () => {
 		)
 	})
 
+  // Handle user interaction
+  const handleClick = (action: string) => {
+
+    // If the user clicked 'accept', add the user to LocalStorage
+    if (action === 'accept') {
+      const potentialUser = users[0]
+      const potentialUsers = JSON.parse(localStorage.getItem('potentialUsers') || '[]')
+      localStorage.setItem('potentialUsers', JSON.stringify([...potentialUsers, potentialUser]))
+    }
+    // Remove the first user from the list
+    const updatedUsers = users.slice(1)
+    setUsers(updatedUsers)
+  }
+
   // CSS styles
   const styles: { [key: string]: CSSProperties } = {
     h1: {
@@ -70,12 +86,48 @@ const CandidateSearch = () => {
       fontSize: '2rem',
       color: 'blue',
     },
+    profileSelector: {
+      display: 'flex',
+      justifyContent: 'center',
+      width: '100%',
+    },
+    reject: {
+      alignContent: 'center',
+      fontSize: '3rem',
+      color: 'white',
+      cursor: 'pointer',
+      padding: '0.5rem',
+      paddingBottom: '1rem',
+      backgroundColor: 'red',
+      borderRadius: '.5rem 0 0 .5rem',
+    },
+    accept: {
+      alignContent: 'center',
+      fontSize: '3rem',
+      color: 'white',
+      cursor: 'pointer',
+      padding: '0.5rem',
+      paddingBottom: '1rem',
+      backgroundColor: 'green',
+      borderRadius: '0 .5rem .5rem 0',
+    },
   }
 
 	return (
 		<div>
 			<h1 style={styles.h1}>Candidate Search</h1>
-			{users.length === 0 ? <p style={styles.Loading}>Loading...</p> : <div>{profilesList}</div>}
+      { // If users is empty, display loading message, otherwise display the first profile
+        users.length === 0 ? <p style={styles.Loading}>Loading...</p> : (
+          <div style={styles.profileSelector}>
+            <div style={styles.reject} onClick={() => handleClick('reject')}>
+              <FontAwesomeIcon style={{ transform: "rotate(45deg)"}} icon={faPlus} />
+            </div>
+            <div>{profilesList[0]}</div>
+            <div style={styles.accept} onClick={() => handleClick('accept')}>
+              <FontAwesomeIcon icon={faPlus} />
+            </div>
+          </div>)
+      }
 		</div>
 	)
 }
