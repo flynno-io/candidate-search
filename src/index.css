@@ -34,6 +34,7 @@ body {
   background-position: center center;
   margin: 0;
   place-items: center;
+  width: 100%;
   min-width: 320px;
   min-height: 100vh;
 }
