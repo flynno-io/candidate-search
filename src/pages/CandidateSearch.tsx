@@ -8,6 +8,7 @@ import MobileCandidates from "../components/MobileCandidates"
 const CandidateSearch = () => {
 	const [candidates, setCandidates] = useState<Candidate[]>([])
 	const [isMobile, setIsMobile] = useState(window.innerWidth < 700)
+  const [firstLoad, setFirstLoad] = useState(true)
 
 	// Check if the window is resized to mobile, if so set isMobile to true
 	useEffect(() => {
@@ -72,6 +73,7 @@ const CandidateSearch = () => {
 
 	// Handle user interaction
 	const handleClick = (action: string) => {
+    setFirstLoad(false)
 		// If the user clicked 'accept', add the user to LocalStorage
 		if (action === "accept") {
 			const potentialCandidate = candidates[0]
@@ -104,9 +106,11 @@ const CandidateSearch = () => {
 	return (
 		<div>
 			<h1 style={styles.h1}>Candidate Search</h1>
-			{candidates.length === 0 ? (
+			{candidates.length === 0 && firstLoad ? (
 				<p style={styles.Loading}>Loading...</p>
-			) : isMobile ? (
+			) : candidates.length === 0 ? (
+        <p style={styles.Loading}>No more candidates</p>
+      ) : isMobile ? (
 				<MobileCandidates candidates={profilesList} handleClick={handleClick} />
 			) : (
 				<DesktopCandidates candidates={profilesList} handleClick={handleClick} />

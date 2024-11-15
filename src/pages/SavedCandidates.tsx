@@ -1,4 +1,5 @@
 import { useState, CSSProperties, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Candidate } from "../interfaces/Candidate.interface";
 import DesktopCandidateTable from "../components/DesktopCandidateTable";
 import MobileCandidateTable from "../components/MobileCandidateTable";
@@ -47,7 +48,10 @@ const SavedCandidates = () => {
 		<>
 			<h1 style={styles.h1}>Potential Candidates</h1>
 			{candidates.length === 0 ? (
-				<p style={styles.Loading}>Loading...</p>
+        <div style={{ margin: '1rem', padding: '.25rem', textAlign: 'center'}}>
+          <p style={styles.Loading}>No Candidates have been selected</p>
+          <p>Go to <Link to="/">Home</Link> to select candidates.</p>
+        </div>
 			) : isMobile ? (
 				<MobileCandidateTable candidates={candidates} handleRemove={handleRemove} />
 			) : (

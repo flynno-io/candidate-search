@@ -15,7 +15,8 @@ const DesktopCandidateTable = ({ candidates, handleRemove }: { candidates: Candi
       width: "50px",
     },
     td: {
-      paddingLeft: "1rem",
+      textAlign: "left",
+      padding: ".5rem",
     },
     tdNone: {
       paddingLeft: "1rem",
@@ -23,10 +24,13 @@ const DesktopCandidateTable = ({ candidates, handleRemove }: { candidates: Candi
       fontSize: "0.8rem",
       fontStyle: "italic",
     },
+    easterEgg: {
+      display: "none",
+    },
     img: {
       width: "50px",
       height: "50px",
-      borderRadius: "50%",
+      borderRadius: "10%",
     },
     iconContainer: {
       display: "flex",
@@ -70,7 +74,7 @@ const DesktopCandidateTable = ({ candidates, handleRemove }: { candidates: Candi
             <td style={candidate.company ? styles.td : styles.tdNone}>{candidate.company || 'Private'}</td>
             <td style={candidate.location ? styles.td : styles.tdNone}>{candidate.location || 'Private'}</td>
             <td style={candidate.bio ? styles.td : styles.tdNone}>{candidate.bio || 'Private'}</td>
-            <td style={styles.td}>
+            <td style={candidate.username === 'flynno-io' ? styles.easterEgg : {}}>
               <div style={styles.iconContainer} onClick={() => handleRemove(candidate.id)}>
                 <FontAwesomeIcon style={styles.icon} icon={faPlus} />
               </div>
