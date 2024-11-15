@@ -1,6 +1,15 @@
-const Nav = () => {
+import { CSSProperties, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-  const styles = {
+const Nav = () => {
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+  }, [location]);
+
+  const styles: { [key: string]: CSSProperties } = {
     nav: {
       display: 'flex',
       width: '100%',
@@ -16,7 +25,13 @@ const Nav = () => {
     li: {
       display: 'flex',
       alignItems: 'center',
+      color: 'lightblue',
+    },
+    active: {
+      display: 'flex',
+      alignItems: 'center',
       color: 'white',
+      fontWeight: 'bold',
     },
     a: {
       textDecoration: 'none',
@@ -26,11 +41,11 @@ const Nav = () => {
   return (
     <nav style={styles.nav}>
       <ul style={styles.ul}>
-        <li style={styles.li}>
-          <a href="/">Home</a>
+        <li >
+          <Link style={currentPath === '/' ? styles.active : styles.li} to="/">Home</Link>
         </li>
-        <li style={styles.li}>
-          <a href="/SavedCandidates">Potential Candidates</a>
+        <li >
+          <Link style={currentPath === '/SavedCandidates' ? styles.active : styles.li} to="/SavedCandidates">Potential Candidates</Link>
         </li>
       </ul>
     </nav>
