@@ -6,7 +6,7 @@ import DesktopCandidates from "../components/DesktopCandidates"
 import MobileCandidates from "../components/MobileCandidates"
 
 const CandidateSearch = () => {
-	const [users, setUsers] = useState<Candidate[]>([])
+	const [candidates, setCandidates] = useState<Candidate[]>([])
 	const [isMobile, setIsMobile] = useState(window.innerWidth < 700)
 
 	// Check if the window is resized to mobile, if so set isMobile to true
@@ -18,17 +18,17 @@ const CandidateSearch = () => {
 		return () => mediaQuery.removeEventListener("change", handleResize)
 	}, [])
 
-	// Get users from Github API
+	// Get candidates from Github API
 	useEffect(() => {
-		const fetchUsers = async () => {
-			// Get random set of users from Github API
-			const users = await searchGithub()
+		const fetchCandidates = async () => {
+			// Get random set of candidates from Github API
+			const candidates = await searchGithub()
 
-			console.log(users)
+			console.log(candidates)
 
 			// Get user details from Github API and format into a Candidate object
-			const usersWithDetails: Candidate[] = await Promise.all(
-				users.map(async (user: any) => {
+			const candidatesWithDetails: Candidate[] = await Promise.all(
+				candidates.map(async (user: any) => {
 					const profile = await searchGithubUser(user.login)
 					console.log(profile)
 					return {
@@ -43,29 +43,29 @@ const CandidateSearch = () => {
 					}
 				})
 			)
-			const filteredUsers = usersWithDetails.filter(
+			const filterCandidates = candidatesWithDetails.filter(
 				(user: Candidate) => user.id && user.username
 			)
-			// Set users state to the formatted Candidate objects
-			setUsers(filteredUsers)
+			// Set candidates state to the formatted Candidate objects
+			setCandidates(filterCandidates)
 		}
-		fetchUsers()
+		fetchCandidates()
 	}, [])
 
 	// Create a Profile component for each user
-	const profilesList = users.map((user: Candidate, index: number) => {
-		console.log(user)
+	const profilesList = candidates.map((candidate: Candidate, index: number) => {
+		console.log(candidate)
 		return (
 			<Profile
 				key={index}
-				id={user.id}
-				username={user.username}
-				htmlUrl={user.htmlUrl}
-				company={user.company}
-				email={user.email}
-				location={user.location}
-				bio={user.bio}
-				avatar={user.avatar}
+				id={candidate.id}
+				username={candidate.username}
+				htmlUrl={candidate.htmlUrl}
+				company={candidate.company}
+				email={candidate.email}
+				location={candidate.location}
+				bio={candidate.bio}
+				avatar={candidate.avatar}
 			/>
 		)
 	})
@@ -74,18 +74,18 @@ const CandidateSearch = () => {
 	const handleClick = (action: string) => {
 		// If the user clicked 'accept', add the user to LocalStorage
 		if (action === "accept") {
-			const potentialUser = users[0]
-			const potentialUsers = JSON.parse(
-				localStorage.getItem("potentialUsers") || "[]"
+			const potentialCandidate = candidates[0]
+			const potentialCandidates = JSON.parse(
+				localStorage.getItem("potentialCandidates") || "[]"
 			)
 			localStorage.setItem(
-				"potentialUsers",
-				JSON.stringify([...potentialUsers, potentialUser])
+				"potentialCandidates",
+				JSON.stringify([...potentialCandidates, potentialCandidate])
 			)
 		}
 		// Remove the first user from the list
-		const updatedUsers = users.slice(1)
-		setUsers(updatedUsers)
+		const updatedCandidates = candidates.slice(1)
+		setCandidates(updatedCandidates)
 	}
 
 	// CSS styles
@@ -104,7 +104,7 @@ const CandidateSearch = () => {
 	return (
 		<div>
 			<h1 style={styles.h1}>Candidate Search</h1>
-			{users.length === 0 ? (
+			{candidates.length === 0 ? (
 				<p style={styles.Loading}>Loading...</p>
 			) : isMobile ? (
 				<MobileCandidates candidates={profilesList} handleClick={handleClick} />
